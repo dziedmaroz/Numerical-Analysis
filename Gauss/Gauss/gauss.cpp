@@ -48,7 +48,7 @@ Gauss::Position Gauss::findDominant(int k)
 
 void Gauss::swapRows(int x, int y)
 {
-    for (int i=0;i<size+1;i++)
+    for (int i=1;i<size+1;i++)
     {
         double tmp = matrix[x][i];
         matrix [x][i] = matrix[y][i];

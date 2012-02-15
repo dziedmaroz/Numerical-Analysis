@@ -6,13 +6,18 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    Gauss gauss =  Gauss("test.in");
-    double * res = gauss.solve();
-    for (int i=0;i<gauss.getSize();i++)
+    for (int i=1;i<argc;i++)
     {
-        printf ("%8.3lf  ",res[i]);
+        Gauss gauss =  Gauss(argv[1]);
+        double * res = gauss.solve();
+        printf ("RUNNING ON TEST: %s\n",argv[i]);
+        for (int i=0;i<gauss.getSize();i++)
+        {
+            printf ("%8.3lf  ",res[i]);
+        }
+        printf ("\n");
+        delete res;
     }
-    printf ("\n");
-    delete res;
     return 0;
+
 }
