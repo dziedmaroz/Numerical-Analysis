@@ -8,6 +8,8 @@
 
 using namespace std;
 
+struct DivByZeroException {};
+struct CannotSolve {};
 class Gauss
 {
     double ** matrix;

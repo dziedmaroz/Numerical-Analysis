@@ -1,7 +1,5 @@
 #include "gauss.h"
 
-struct DivByZeroException {};
-struct CannotSolve {};
 Gauss::Gauss (char *filename)
 {
     FILE* fin = fopen (filename,"r");
