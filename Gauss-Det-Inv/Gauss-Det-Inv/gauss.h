@@ -7,13 +7,13 @@
 
 using namespace std;
 
-
+struct DivByZeroException {};
 class Gauss
 {
 private:
     double** matrix;
     unsigned int size;
-    double** copy (const double** source);
+    void copy (const double** source, double** &dest);
     double** getIndent ();
     int *permutation;
 
@@ -24,13 +24,14 @@ private:
     };
 
     void permutate (double* &x);
-    Position findDominant (int k);
-    void swapRows (int x, int y);
-    void swapColumns (int x, int y);
+    Position findDominant (int k, double** &matr);
+    void swapRows (int x, int y, double** &matr);
+    void swapColumns (int x, int y, double** &matr);
 public:
     Gauss (char* filename);
     int getSize() {return size;}
     double det ();
+    double** invert ();
     ~Gauss();
 };
 
