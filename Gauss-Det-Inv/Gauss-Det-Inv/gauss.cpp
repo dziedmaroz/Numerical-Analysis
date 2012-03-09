@@ -264,17 +264,5 @@ double** Gauss::invert()
     }
     delete[] matrCopy;
     return indent;
+} 
 
-}
-
-void Gauss::printMatrix (double ** matrix, int size)
-{
-    for (int i=0;i<size;i++)
-    {
-        for (int j=0;j<size;j++)
-        {
-            printf("%8.3lf ",matrix[i][j]);
-        }
-        printf ("\n");
-    }
-}

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
         }
         double det = gauss.det();
         printf ("det (A) = %8.3lf\n",det);
-        printf("A^-1:\n");
+        printf("det(A)*A^-1:\n");
         for (int i=0;i<gauss.getSize();i++)
         {
             for (int j=0;j<gauss.getSize();j++) printf ("%8.2lf",det*res[i][j]);

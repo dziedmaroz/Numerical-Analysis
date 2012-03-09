@@ -1,0 +1,126 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}     
+\usepackage[utf8]{inputenc}  
+\usepackage{lmodern}  
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb} 
+\usepackage{listings}
+\usepackage{lstcustom}
+\usepackage{graphicx}
+\usepackage{geometry} % Меняем поля страницы
+\geometry{left=2cm}% левое поле
+\geometry{right=1.5cm}% правое поле
+\geometry{top=1cm}% верхнее поле
+\geometry{bottom=2cm}% нижнее поле
+\renewcommand\lstlistingname{Листинг}
+\renewcommand\contentsname{Содержание}
+\renewcommand\partname{Часть}
+\renewcommand{\thechapter}{(\arabic{chapter})}
+
+\title{Лабораторная работа №1. Метод Гаусса с выбором главного элемента}
+\author{Архангельский Илья}
+
+
+\begin{document}
+\begin{titlepage}
+	\begin{center}
+		БЕЛОРУССКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ \\
+		ФАКУЛЬТЕТ ПРИКЛАДНОЙ МАТЕМАТИКИ И ИНФОРМАТИКИ
+	\end{center}
+	\vspace{10em}
+	\begin{center}
+		\LARGE {Лабораторная работа \\
+		по вычислительным методам алгебры на тему:}
+		\linebreak	 
+		
+		Вычисление определителя и обратной матрицы с помощью метода Гаусса
+	\end{center}
+	\vspace{3em}
+	\begin{flushright}
+	  
+	
+ 	Выполнил: \\	Архангdельский И.А. \\ 
+ 	
+ 	  \vspace{1em}
+ 	
+ 	  Проверил: \\ Кондратюк А.П. \\
+ 	
+	\end{flushright}
+	
+	\vfill
+	\begin{center}
+		Минск, 2012
+	\end{center}
+\end{titlepage} 
+
+\newpage
+\chapter{Входные и выходные данные.} 
+\section*{Входные данные}
+На \textbf{вход} программа принимает текстовый файл в котором первой строкой стоит целое неотрицательное число $n$, показывающее размерность матрицы $A$. Следующие $n$ строк содержат матрицу $A$. 
+\section*{Выходные данные}
+На выход в \textbf{stdout} подается 
+\newpage
+\chapter{Блок-схема} 
+ 
+ 
+
+
+\newpage
+\chapter{Реализация}
+\lstinputlisting[language=C++,, style=eclipse, caption={gauss.h},basicstyle=\footnotesize]{"../Gauss-Det-Inv/gauss.h"}
+\newpage
+\lstinputlisting[language=C++, style=eclipse, caption={gauss.cpp},basicstyle=\footnotesize]{"../Gauss-Det-Inv/gauss.cpp"}
+ 
+\newpage
+\lstinputlisting[language=C++, style=eclipse, caption={main.cpp},basicstyle=\footnotesize]{"../Gauss-Det-Inv/main.cpp"}
+ 
+\newpage
+\chapter{Тестовые данные}
+\begin{footnotesize}
+\framebox{
+  \begin{minipage}[t]{0.4\linewidth}   
+  \lstinputlisting[title={test01.in}]{"../tests/test01.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test01.out}]{"../tests/test01.out"}
+  \end{minipage}
+}
+\framebox
+{ 
+  \begin{minipage}[t]{0.4\linewidth}   
+  \lstinputlisting[title={test02.in}]{"../tests/test02.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test02.out}]{"../tests/test02.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test03.in}]{"../tests/test03.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test03.out}]{"../tests/test03.out"}
+  \end{minipage}  
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test04.in}]{"../tests/test04.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test04.out}]{"../tests/test04.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test05.in}]{"../tests/test05.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test05.out}]{"../tests/test05.out"}
+  \end{minipage}  
+}
+\end{footnotesize}
+\end{document}
