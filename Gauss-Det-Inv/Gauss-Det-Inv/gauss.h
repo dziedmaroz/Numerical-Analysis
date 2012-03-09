@@ -13,8 +13,8 @@ class Gauss
 private:
     double** matrix;
     unsigned int size;
-    void copy (const double** source, double** &dest);
-    double** getIndent ();
+    void copy (  double** source, double** &dest);
+    double** getIndent (int sz);
     int *permutation;
 
     struct Position
@@ -32,6 +32,7 @@ public:
     int getSize() {return size;}
     double det ();
     double** invert ();
+    void printMatrix (double ** matrix, int size);
     ~Gauss();
 };
 

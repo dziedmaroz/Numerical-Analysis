@@ -32,7 +32,7 @@ Gauss::~Gauss()
 }
 
 
-void  Gauss::copy (const double** source, double** &dest)
+void  Gauss::copy (  double** source, double** &dest)
 {
     double** tmp = new double* [this->size];
     for (int i=0;i<this->size;i++)
@@ -46,13 +46,13 @@ void  Gauss::copy (const double** source, double** &dest)
     dest = tmp;
 }
 
-double** Gauss::getIndent()
+double** Gauss::getIndent(int sz)
 {
-    double** tmp = new double* [this->size];
-    for (int i=0;i<this->size;i++)
+    double** tmp = new double* [sz];
+    for (int i=0;i<sz;i++)
     {
-        tmp[i]=new double [this->size];
-        for (int j=0;j<this->size;j++)
+        tmp[i]=new double [sz];
+        for (int j=0;j<sz;j++)
         {
             if (i==j)
             {
@@ -64,18 +64,21 @@ double** Gauss::getIndent()
             }
         }
     }
+    return tmp;
 }
 
 double Gauss::det()
 {
+
     double** matrCopy = NULL;
-    copy(this->matrix,matrCopy);
+    copy(this->matrix,matrCopy);    
     double d = 1;
 
     for (int i=0;i<size;i++)
     {
+
         Position dominantPos = findDominant(i,matrCopy);
-        double dominant = matr[dominantPos.m][dominantPos.n];
+        double dominant = matrCopy[dominantPos.m][dominantPos.n];
         if (fabs(dominant)<pow(10,-20)) throw DivByZeroException ();
         if (dominantPos.m==i)
         {
@@ -88,15 +91,15 @@ double Gauss::det()
         d *= dominant;
         for (int j=i;j<size;j++)
         {
-            matr[i][j]/=dominant;
+            matrCopy[i][j]/=dominant;
         }
 
         for (int j=i+1;j<size;j++)
         {
-            double first = matr[j][i];
+            double first = matrCopy[j][i];
             for (int k=i;k<size;k++)
             {
-                matr[j][k]=matr[j][k] - first*matr[i][k];
+                matrCopy[j][k]=matrCopy[j][k] - first*matrCopy[i][k];
             }
         }
     }
@@ -106,6 +109,7 @@ double Gauss::det()
         delete[] matrCopy[i];
     }
     delete[] matrCopy;
+    return d;
 }
 Gauss::Position Gauss::findDominant(int k, double **&matr)
 {
@@ -130,7 +134,7 @@ Gauss::Position Gauss::findDominant(int k, double **&matr)
 
 void Gauss::swapRows(int x, int y, double **&matr)
 {
-    for (int i=1;i<size+1;i++)
+    for (int i=0;i<size;i++)
     {
         double tmp = matr[x][i];
         matr [x][i] = matr[y][i];
@@ -168,12 +172,15 @@ double** Gauss::invert()
 {
     double** matrCopy = NULL;
     copy(this->matrix,matrCopy);
-    double** indent = getIndent();
-
+    double** indent = getIndent(this->size);
     for (int i=0;i<size;i++)
     {
+        printMatrix(matrCopy, size);
+        printf("   ---\n");
+        printMatrix(indent,size);
+        printf("\n\n");
         Position dominantPos = findDominant(i,matrCopy);
-        double dominant = matr[dominantPos.m][dominantPos.n];
+        double dominant = matrCopy[dominantPos.m][dominantPos.n];
         if (fabs(dominant)<pow(10,-20)) throw DivByZeroException ();
         if (dominantPos.m==i)
         {
@@ -183,30 +190,59 @@ double** Gauss::invert()
         if (dominantPos.n==i)
         {
             swapRows(i,dominantPos.m, matrCopy);
-            swapRows(i,dominantPos.m,indent);
+            swapRows(i,dominantPos.m, indent);
         }
-
         for (int j=i;j<size;j++)
         {
-            matr[i][j]/=dominant;
+            matrCopy[i][j]/=dominant;
             indent[i][j]/=dominant;
         }
 
         for (int j=i+1;j<size;j++)
         {
-            double first = matr[j][i];
+            double first = matrCopy[j][i];
             for (int k=i;k<size;k++)
             {
-                matr[j][k]=matr[j][k] - first*matr[i][k];
-                indent[j][k]=indent[j][k]-first*indent[i][k];
+                matrCopy[j][k]=matrCopy[j][k] - first*matrCopy[i][k];
+            }
+        }
+    }
+    for (int i=size-1;i>=0;i--)
+    {
+        for (int j=i-1;j>=0;j--)
+        {
+            double tmp = matrCopy[j][i];
+            for (int k=0;k<size;k++)
+            {
+                matrCopy[j][k]-=matrCopy[i][k]*tmp;
+                indent[j][k]-=indent[i][k]*tmp;
             }
         }
     }
 
+    printMatrix(matrCopy, size);
+    printf("   ---\n");
+    printMatrix(indent,size);
+    printf("\n\n");
     for (int i=0;i<size;i++)
     {
         delete[] matrCopy[i];
+        delete[] indent[i];
     }
     delete[] matrCopy;
-    return indent;
+    delete [] indent;
+    return NULL;
+
+}
+
+void Gauss::printMatrix (double ** matrix, int size)
+{
+    for (int i=0;i<size;i++)
+    {
+        for (int j=0;j<size;j++)
+        {
+            printf("%8.3lf ",matrix[i][j]);
+        }
+        printf ("\n");
+    }
 }
