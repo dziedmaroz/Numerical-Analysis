@@ -15,7 +15,8 @@ private:
     unsigned int size;
     void copy (  double** source, double** &dest);
     double** getIndent (int sz);
-    int *permutation;
+    int *permutationColumns;
+    int *permutationRows;
 
     struct Position
     {
@@ -24,9 +25,9 @@ private:
     };
 
     void permutate (double* &x);
-    Position findDominant (int k, double** &matr);
-    void swapRows (int x, int y, double** &matr);
-    void swapColumns (int x, int y, double** &matr);
+    Position findDominant (uint k, double** &matr);
+    void swapRows (int x, int y, double** &matr, bool chVector);
+    void swapColumns (int x, int y, double** &matr, bool chVector);
 public:
     Gauss (char* filename);
     int getSize() {return size;}

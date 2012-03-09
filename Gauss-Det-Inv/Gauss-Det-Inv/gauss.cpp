@@ -5,40 +5,42 @@ Gauss::Gauss (char *filename)
     FILE* fin = fopen (filename,"r");
     fscanf (fin,"%d\n",&size);
     matrix = new double* [size];
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
         matrix[i]= new double [size];
-        for (int j=0;j<size;j++)
+        for (uint j=0;j<size;j++)
         {
             fscanf(fin,"%lf",&matrix[i][j]);
         }
     }
-    permutation = new int [size];
-    for (int i=0;i<size;i++)
+    permutationColumns = new int [size];
+    permutationRows = new int [size];
+    for (uint i=0;i<size;i++)
     {
-        permutation [i]= i;
+        permutationColumns [i]= i;
+        permutationRows[i]=i;
     }
     fclose (fin);
 }
 
 Gauss::~Gauss()
 {
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
         delete matrix[i];
     }
     delete matrix;
-    delete permutation;
+    delete permutationColumns;
 }
 
 
 void  Gauss::copy (  double** source, double** &dest)
 {
     double** tmp = new double* [this->size];
-    for (int i=0;i<this->size;i++)
+    for (uint i=0;i<this->size;i++)
     {
         tmp[i]=new double [size];
-        for (int j=0;j<this->size;j++)
+        for (uint j=0;j<this->size;j++)
         {
             tmp[i][j]=source[i][j];
         }
@@ -74,49 +76,49 @@ double Gauss::det()
     copy(this->matrix,matrCopy);    
     double d = 1;
 
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
 
         Position dominantPos = findDominant(i,matrCopy);
         double dominant = matrCopy[dominantPos.m][dominantPos.n];
         if (fabs(dominant)<pow(10,-20)) throw DivByZeroException ();
-        if (dominantPos.m==i)
+        if (dominantPos.m==i && dominantPos.n!=i)
         {
-            swapColumns(i,dominantPos.n,matrCopy);
+            swapColumns(i,dominantPos.n,matrCopy, true);
         }
-        if (dominantPos.n==i)
+        if (dominantPos.n==i && dominantPos.m!=i)
         {
-            swapRows(i,dominantPos.m, matrCopy);
+            swapRows(i,dominantPos.m, matrCopy, true);
         }
         d *= dominant;
-        for (int j=i;j<size;j++)
+        for (uint j=i;j<size;j++)
         {
             matrCopy[i][j]/=dominant;
         }
 
-        for (int j=i+1;j<size;j++)
+        for (uint j=i+1;j<size;j++)
         {
             double first = matrCopy[j][i];
-            for (int k=i;k<size;k++)
+            for (uint k=i;k<size;k++)
             {
                 matrCopy[j][k]=matrCopy[j][k] - first*matrCopy[i][k];
             }
         }
     }
 
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
         delete[] matrCopy[i];
     }
     delete[] matrCopy;
     return d;
 }
-Gauss::Position Gauss::findDominant(int k, double **&matr)
+Gauss::Position Gauss::findDominant(uint k, double **&matr)
 {
     Position pos;
     pos.m = k;
     pos.n = k;
-    for (int i=k;k<size;k++)
+    for (uint i=k;k<size;k++)
     {
         if (fabs(matr[i][k])>fabs(matr[pos.m][pos.n]))
         {
@@ -129,39 +131,49 @@ Gauss::Position Gauss::findDominant(int k, double **&matr)
             pos.n = i;
         }
     }
+
     return pos;
 }
 
-void Gauss::swapRows(int x, int y, double **&matr)
+void Gauss::swapRows(int x, int y, double **&matr, bool chVector)
 {
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
         double tmp = matr[x][i];
         matr [x][i] = matr[y][i];
         matr [y][i] = tmp;
     }
+    if (chVector)
+    {
+        int tmp = permutationRows[x];
+        permutationRows [x] = permutationRows[y];
+        permutationRows [y] = tmp;
+    }
 }
 
-void Gauss::swapColumns(int x, int y, double **&matr)
+void Gauss::swapColumns(int x, int y, double **&matr, bool chVector)
 {
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
         double tmp = matr[i][x];
         matr [i][x] = matr[i][y];
         matr [i][y] = tmp;
+    }    
+    if (chVector)
+    {
+        int tmp = permutationColumns[x];
+        permutationColumns [x] = permutationColumns[y];
+        permutationColumns [y] = tmp;
     }
-    int tmp = permutation[x];
-    permutation [x] = permutation[y];
-    permutation [y] = tmp;
 }
 void Gauss::permutate(double *&x)
 {
     double* res = new double [size];
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
-        res[permutation[i]]=x[i];
+        res[permutationColumns[i]]=x[i];
     }
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
         x[i]=res[i];
     }
@@ -170,68 +182,88 @@ void Gauss::permutate(double *&x)
 
 double** Gauss::invert()
 {
+    for (int i=0;i<size;i++)
+    {
+        permutationColumns[i]=i;
+        permutationRows[i]=i;
+    }
     double** matrCopy = NULL;
     copy(this->matrix,matrCopy);
     double** indent = getIndent(this->size);
-    for (int i=0;i<size;i++)
+    for (uint i=0;i<size;i++)
     {
-        printMatrix(matrCopy, size);
-        printf("   ---\n");
-        printMatrix(indent,size);
-        printf("\n\n");
         Position dominantPos = findDominant(i,matrCopy);
         double dominant = matrCopy[dominantPos.m][dominantPos.n];
         if (fabs(dominant)<pow(10,-20)) throw DivByZeroException ();
-        if (dominantPos.m==i)
+        if (dominantPos.m==i && dominantPos.n!=i)
         {
-            swapColumns(i,dominantPos.n,matrCopy);
-            swapColumns(i,dominantPos.n,indent);
+            swapColumns(i,dominantPos.n,matrCopy, true);
+            swapColumns(i,dominantPos.n,indent, false);
+
         }
-        if (dominantPos.n==i)
+        if (dominantPos.n==i && dominantPos.m!=i)
         {
-            swapRows(i,dominantPos.m, matrCopy);
-            swapRows(i,dominantPos.m, indent);
+            swapRows(i,dominantPos.m, matrCopy,true);
+            swapRows(i,dominantPos.m, indent,false);
         }
-        for (int j=i;j<size;j++)
+        for (uint j=0;j<size;j++)
         {
             matrCopy[i][j]/=dominant;
             indent[i][j]/=dominant;
         }
 
-        for (int j=i+1;j<size;j++)
+        for (uint j=i+1;j<size;j++)
         {
             double first = matrCopy[j][i];
-            for (int k=i;k<size;k++)
+            for (uint k=0;k<size;k++)
             {
                 matrCopy[j][k]=matrCopy[j][k] - first*matrCopy[i][k];
+                indent[j][k] = indent[j][k]-first*indent[i][k];
             }
         }
     }
+
     for (int i=size-1;i>=0;i--)
     {
         for (int j=i-1;j>=0;j--)
         {
             double tmp = matrCopy[j][i];
-            for (int k=0;k<size;k++)
+            for  (int k=0;k<size;k++)
             {
-                matrCopy[j][k]-=matrCopy[i][k]*tmp;
-                indent[j][k]-=indent[i][k]*tmp;
+                matrCopy[j][k] = matrCopy[j][k]-matrCopy[i][k]*tmp;
+                indent[j][k] = indent[j][k]-indent[i][k]*tmp;
+            }
+        }
+
+    }
+
+    for (int i=0;i<size;i++)
+    {
+        swapColumns(permutationColumns[i],i,indent,false);
+        swapColumns(permutationColumns[i],i,matrCopy,true);
+    }
+
+    for (int i=0;i<size;i++)
+    {
+        for (int j=0;j<size;j++)
+        {
+            if (matrCopy[i][j]==1)
+            {
+                permutationRows[i]=j;
             }
         }
     }
-
-    printMatrix(matrCopy, size);
-    printf("   ---\n");
-    printMatrix(indent,size);
-    printf("\n\n");
     for (int i=0;i<size;i++)
     {
+        swapRows(permutationRows[i],i,indent,true);
+    }
+    for (uint i=0;i<size;i++)
+    {
         delete[] matrCopy[i];
-        delete[] indent[i];
+
     }
     delete[] matrCopy;
-    delete [] indent;
-    return NULL;
+    return indent;
 
 }
 
