@@ -15,8 +15,9 @@
 \geometry{bottom=2cm}% нижнее поле
 \renewcommand\lstlistingname{Листинг}
 \renewcommand\contentsname{Содержание}
-\renewcommand\partname{Часть}
-\renewcommand{\thechapter}{(\arabic{chapter})}
+\renewcommand\partname{ }
+\renewcommand{\thepart}{\arabic{part}}
+
 
 \title{Лабораторная работа №1. Метод Гаусса с выбором главного элемента}
 \author{Архангельский Илья}
@@ -55,19 +56,22 @@
 \end{titlepage} 
 
 \newpage
-\chapter{Входные и выходные данные.} 
+\part*{Входные и выходные данные.} 
 \section*{Входные данные}
 На \textbf{вход} программа принимает текстовый файл в котором первой строкой стоит целое неотрицательное число $n$, показывающее размерность матрицы $A$. Следующие $n$ строк содержат матрицу $A$. 
 \section*{Выходные данные}
-На выход в \textbf{stdout} подается 
+На выход в \textbf{stdout} выводится значение определителя, и матрица вида $det(A) A^-1$.
 \newpage
-\chapter{Блок-схема} 
- 
- 
+\part*{Блок-схема} 
+\section*{Вычисление обратной матрицы}
+\includegraphics[scale=0.75]{flowchart1.pdf}
+\newpage
+\section*{Вычисление определителя}
+ \includegraphics[scale=0.75]{flowchart2.pdf}
 
 
 \newpage
-\chapter{Реализация}
+\part*{Реализация}
 \lstinputlisting[language=C++,, style=eclipse, caption={gauss.h},basicstyle=\footnotesize]{"../Gauss-Det-Inv/gauss.h"}
 \newpage
 \lstinputlisting[language=C++, style=eclipse, caption={gauss.cpp},basicstyle=\footnotesize]{"../Gauss-Det-Inv/gauss.cpp"}
@@ -76,7 +80,7 @@
 \lstinputlisting[language=C++, style=eclipse, caption={main.cpp},basicstyle=\footnotesize]{"../Gauss-Det-Inv/main.cpp"}
  
 \newpage
-\chapter{Тестовые данные}
+\part*{Тестовые данные}
 \begin{footnotesize}
 \framebox{
   \begin{minipage}[t]{0.4\linewidth}   

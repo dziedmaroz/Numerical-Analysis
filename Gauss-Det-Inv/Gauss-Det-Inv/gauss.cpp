@@ -75,6 +75,7 @@ double Gauss::det()
     double** matrCopy = NULL;
     copy(this->matrix,matrCopy);    
     double d = 1;
+    double sgn = 1;
 
     for (uint i=0;i<size;i++)
     {
@@ -85,10 +86,12 @@ double Gauss::det()
         if (dominantPos.m==i && dominantPos.n!=i)
         {
             swapColumns(i,dominantPos.n,matrCopy, true);
+            sgn*=-1;
         }
         if (dominantPos.n==i && dominantPos.m!=i)
         {
             swapRows(i,dominantPos.m, matrCopy, true);
+            sgn*=-1;
         }
         d *= dominant;
         for (uint j=i;j<size;j++)
@@ -111,7 +114,7 @@ double Gauss::det()
         delete[] matrCopy[i];
     }
     delete[] matrCopy;
-    return d;
+    return d*sgn;
 }
 Gauss::Position Gauss::findDominant(uint k, double **&matr)
 {

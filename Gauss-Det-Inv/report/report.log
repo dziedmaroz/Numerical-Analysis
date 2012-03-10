@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  9 MAR 2012 23:24
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.3.8)  10 MAR 2012 12:42
 entering extended mode
  %&-line parsing enabled.
 **report.tex
@@ -837,10 +837,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 5188 strings out of 494818
- 63573 string characters out of 1178667
- 195643 words of memory out of 3000000
- 8248 multiletter control sequences out of 15000+50000
+ 5190 strings out of 494818
+ 63589 string characters out of 1178667
+ 194643 words of memory out of 3000000
+ 8250 multiletter control sequences out of 15000+50000
  28239 words of font info for 46 fonts, out of 3000000 for 9000
  212 hyphenation exceptions out of 8191
  35i,6n,61p,487b,1668s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -853,7 +853,7 @@ h/lh-t2a/larm1728.600pk> </home/lucian/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/lar
 m1095.600pk></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb>
-Output written on report.pdf (11 pages, 158208 bytes).
+Output written on report.pdf (11 pages, 158692 bytes).
 PDF statistics:
  324 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
