@@ -29,10 +29,11 @@ class LU
           lu.each_index{ |k| tmp+=lu[j][k]*lu[k][i] if k<i}
           lu[j][i]=(@matrix[j][i]-tmp)/lu[i][i];
         end
-
-
       }
     }
+    lu.each_index { |index| lu[index].push(@matrix[index][@matrix.length])}
+    lu.each_index { |i| tmp = lu[lu.length-i-1][lu.length-i-1] ;lu[lu.length-i-1].each_index { |j| lu[lu.length-i-1][j]/=tmp if j>=lu.length-i-1} }
+     
     print_matrix (lu)
    
 
