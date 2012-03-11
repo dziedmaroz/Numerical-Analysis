@@ -1,42 +1,57 @@
 class WrongMatrixDimentionsException < StandardError; end
+class NoArgsException < StandardError; end
 
 class LU
   def initialize (stream)
     @matrix = Array.new
     stream.each { |line| tmp = Array.new; line.scan(/\w+/) {|match| tmp.push(match.to_f)}; @matrix.push(tmp);}
-    raise WrongMatrixDimentionsException unless allok?    
+    raise WrongMatrixDimentionsException unless allok?
   end
 
   def allok?
     return @matrix.find_all { |obj| obj.length == @matrix.length+1}.length==@matrix.length
   end
-
   def solve
-    lu = Array.new(@matrix.length).map { Array.new(@matrix.length).map {0.0}}
-    lu.each_index { |index| lu[0][index] = @matrix[0][index]}
-    lu.each_index { |index| lu[index][0] = @matrix[index][0]/lu[0][0] if index>0}
-    lu.each_index { |i|
-      lu[i].each_index{|j|
-        if j>=i
-          tmp = 0
-          lu.each_index{ |k| tmp+=lu[i][k]*lu[k][j] if k<i}
-          lu[i][j]=@matrix[i][j]-tmp;       
-        end}
-      
-        lu[i].each_index{|j|
-        if j>i
-          tmp = 0
-          lu.each_index{ |k| tmp+=lu[j][k]*lu[k][i] if k<i}
-          lu[j][i]=(@matrix[j][i]-tmp)/lu[i][i];
-        end
-      }
+    l = Array.new(@matrix.length).map{Array.new}
+    u = Array.new(@matrix.length).map{Array.new}
+    @matrix.each_index { |i| u[0].push(@matrix[0][i])}
+    @matrix.each_index {|i| l[i].push(@matrix[i][0]/u[0][0])}
+    @matrix.each_index {|i|
+      if i>0
+        @matrix.each_index { |j|
+          if j>=i
+            tmp = 0
+            for k in 0 .. i-1
+              tmp +=l[i][k]*u[k][j]
+            end
+            u[i][j]=@matrix[i][j]-tmp;
+          end
+        }
+        @matrix.each_index { |j|
+          if j>=i+1
+            tmp = 0
+            for k in 0..i-1
+              tmp+=l[j][k]*u[k][i]
+            end
+            l[j][i] =(@matrix[i][j]-tmp)/u[i][i];
+          end
+        }
+        l[i][i]=1.0;
+      end
     }
-    lu.each_index { |index| lu[index].push(@matrix[index][@matrix.length])}
-    lu.each_index { |i| tmp = lu[lu.length-i-1][lu.length-i-1] ;lu[lu.length-i-1].each_index { |j| lu[lu.length-i-1][j]/=tmp if j>=lu.length-i-1} }
-     
-    print_matrix (lu)
-   
-
+    y = Array.new(@matrix.length);
+    y.each_index {|i|
+      tmp = 0
+      l[i].each_index { |j| tmp+=l[i][j]*y[j] if j<i }
+      y[i]=@matrix[i].last-tmp
+    }
+    x = Array.new(@matrix.length)
+    x.each_index { |i|
+      tmp = 0 ;
+      u[u.length-1-i].each_index { |j| tmp+=u[u.length-1-i][j]*x[j] if j>u.length-1-i }
+      x[x.length-1-i] = (y[x.length-1-i]-tmp)/u[u.length-1-i][u.length-1-i];
+    }
+   return x;
   end
 
   def print_matrix (matrix)
@@ -45,5 +60,7 @@ class LU
 
 end
 
-lu = LU.new(File.open("test.in", "r"))
-lu.solve
+raise NoArgsException unless ARGV.first!=nil
+lu = LU.new(File.open(ARGV.first, "r"))
+fout = File.open(ARGV.first.gsub(/.+\.in/, ".out"),"w")
+lu.solve.each { |e| fout<<e<<"\n"  }
