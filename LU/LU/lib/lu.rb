@@ -1,3 +1,6 @@
+#!/usr/bin/env ruby
+
+
 class WrongMatrixDimentionsException < StandardError; end
 class NoArgsException < StandardError; end
 
@@ -59,8 +62,8 @@ class LU
   end
 
 end
-
 raise NoArgsException unless ARGV.first!=nil
 lu = LU.new(File.open(ARGV.first, "r"))
-fout = File.open(ARGV.first.gsub(/.+\.in/, ".out"),"w")
-lu.solve.each { |e| fout<<e<<"\n"  }
+fout = File.open(ARGV.first.gsub(/\.in/, ".out"),"w")
+lu.solve.each { |e| fout<<e<<" "}
+
