@@ -19,7 +19,7 @@
 \renewcommand{\thepart}{\arabic{part}}
 
 
-\title{Лабораторная работа №1. Метод Гаусса с выбором главного элемента}
+\title{Лабораторная работа №3. Решение систем линейных алгебраических уравнений с помощью LU-разложения}
 \author{Архангельский Илья}
 
 
@@ -35,13 +35,13 @@
 		по вычислительным методам алгебры на тему:}
 		\linebreak	 
 		
-		Вычисление определителя и обратной матрицы с помощью метода Гаусса
+    Решение систем линейных алгебраических уравнений с помощью $LU$-разложения
 	\end{center}
 	\vspace{3em}
 	\begin{flushright}
 	  
 	
- 	Выполнил: \\	Архангdельский И.А. \\ 
+ 	Выполнил: \\	Архангельский И.А. \\ 
  	
  	  \vspace{1em}
  	
@@ -58,26 +58,28 @@
 \newpage
 \part*{Входные и выходные данные.} 
 \section*{Входные данные}
-На \textbf{вход} программа принимает текстовый файл в котором первой строкой стоит целое неотрицательное число $n$, показывающее размерность матрицы $A$. Следующие $n$ строк содержат матрицу $A$. 
+Входной файл содержит матрицу $(A|f)$, где  
+  $A$ - квадратная матрица коэффициентов СЛУ, 
+  $f$ - вектор-столбец свободных членов.
 \section*{Выходные данные}
-На выход в \textbf{stdout} выводится значение определителя, и матрица вида $det(A) A^-1$.
+Выходной файл содержит  решение СЛУ. 
+\section*{Исключения}
+\begin{itemize}
+  \item \textbf{NilMatrixExcpetion} - на вход подана пустая матрица (например, входной файл пуст)
+  \item \textbf{WrongMatrixDimentionsException} - на вход подана матрица размеры которой не соотвествуют предполагаемым
+  \item \textbf{NoArgsException} - не передано имя входного файла
+  \item \textbf{DivByZeroException} - во время получения $LU$-разложения произошло деление на $0$, т.е. на диагонали матрицы $U$ стоит 0
+\end{itemize}
 \newpage
 \part*{Блок-схема} 
-\section*{Вычисление обратной матрицы}
-\includegraphics[scale=0.75]{flowchart1.pdf}
-\newpage
-\section*{Вычисление определителя}
- \includegraphics[scale=0.75]{flowchart2.pdf}
+ \includegraphics[scale=0.9]{flowchart.pdf} 
 
 
 \newpage
 \part*{Реализация}
-\lstinputlisting[language=C++,, style=eclipse, caption={gauss.h},basicstyle=\footnotesize]{"../Gauss-Det-Inv/gauss.h"}
+\lstinputlisting[language=Ruby, style=eclipse, basicstyle=\scriptsize]{"../LU/lib/lu.rb"}
 \newpage
-\lstinputlisting[language=C++, style=eclipse, caption={gauss.cpp},basicstyle=\footnotesize]{"../Gauss-Det-Inv/gauss.cpp"}
- 
-\newpage
-\lstinputlisting[language=C++, style=eclipse, caption={main.cpp},basicstyle=\footnotesize]{"../Gauss-Det-Inv/main.cpp"}
+
  
 \newpage
 \part*{Тестовые данные}

@@ -1,23 +1,26 @@
 #!/usr/bin/env ruby
-
-
+class NilMatrixExcpetion < StandardError; end
 class WrongMatrixDimentionsException < StandardError; end
 class NoArgsException < StandardError; end
+class DivByZeroException < StandardError; end
 
 class LU
-  def initialize (stream)
+  def initialize (stream)    
     @matrix = Array.new
-    stream.each { |line| tmp = Array.new; line.scan(/\w+/) {|match| tmp.push(match.to_f)}; @matrix.push(tmp);}
+    stream.each { |line| tmp = Array.new; line.scan(/-?\d+/) {|match| tmp.push(match.to_f)}; @matrix.push(tmp);}
+    raise NilMatrixExcpetion unless @matrix.length!=0
     raise WrongMatrixDimentionsException unless allok?
   end
 
   def allok?
     return @matrix.find_all { |obj| obj.length == @matrix.length+1}.length==@matrix.length
   end
+
   def solve
     l = Array.new(@matrix.length).map{Array.new}
     u = Array.new(@matrix.length).map{Array.new}
     @matrix.each_index { |i| u[0].push(@matrix[0][i])}
+    raise DivByZeroException unless u[0][0]!=0
     @matrix.each_index {|i| l[i].push(@matrix[i][0]/u[0][0])}
     @matrix.each_index {|i|
       if i>0
@@ -36,7 +39,8 @@ class LU
             for k in 0..i-1
               tmp+=l[j][k]*u[k][i]
             end
-            l[j][i] =(@matrix[i][j]-tmp)/u[i][i];
+            l[j][i] =(@matrix[j][i]-tmp)/u[i][i];
+            raise DivByZeroException unless u[i][i]!=0
           end
         }
         l[i][i]=1.0;
@@ -56,14 +60,9 @@ class LU
     }
    return x;
   end
-
-  def print_matrix (matrix)
-    matrix.each { |item| item.each { |i| print i, " "}; puts}
-  end
-
 end
+
 raise NoArgsException unless ARGV.first!=nil
 lu = LU.new(File.open(ARGV.first, "r"))
 fout = File.open(ARGV.first.gsub(/\.in/, ".out"),"w")
-lu.solve.each { |e| fout<<e<<" "}
-
+lu.solve.each { |e| fout<<sprintf("%3.3f",e)<<" "}
