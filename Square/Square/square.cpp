@@ -38,7 +38,11 @@ double* Square::solve()
     double* D = new double[sz];
     for (int i=0;i<sz;i++)
     {
-        S[i] = new double [sz];
+         S[i] = new double [sz];
+    }
+    for (int i=0;i<sz;i++)
+    {
+
         for (int j=i;j<sz;j++)
         {
             if (i==j)
@@ -49,7 +53,7 @@ double* Square::solve()
                     summ+=S[k][i]*S[k][i]*D[k];
                 }
                 D[i] = sgn (matrix_[i][j]-summ);
-                S[i][j]=fabs(pow (summ,0.5)-matrix_[i][j]);
+                S[i][j]=pow(fabs(summ-matrix_[i][j]),0.5);
 
             }
             if (i<j)
@@ -59,7 +63,9 @@ double* Square::solve()
                 {
                     summ+=S[k][i]*D[k]*S[k][j];
                 }
+                if (S[i][i]*D[i]==0) throw DivByZeroException ();
                 S[i][j] = (matrix_[i][j] - summ)/(S[i][i]*D[i]);
+                S[j][i] = S[i][j];
             }
             if (i>j)
             {
@@ -67,29 +73,26 @@ double* Square::solve()
             }
         }
     }
-
     double* y = new double [sz];
     for (int i =0; i<sz;i++)
     {
         double summ = 0;
         for (int k=0;k<i;k++)
         {
-            summ+=S[k][i]*y[k];
+            summ+=S[i][k]*y[k];
         }
         y[i] = (f[i] - summ)/S[i][i];
-    }
-
+    }   
     double* x = new double [sz];
     for (int i=sz-1;i>=0;i--)
     {
         double summ = 0;
-        for (int k =i+1; k<sz;k++)
+        for (int k = i+1; k<sz;k++)
         {
-            summ+=D[k]*S[k][i]*x[k];
+            summ += S[i][k]*D[i]*x[k];
         }
-        x[i]=(y[i] - summ)/D[i]*S[i][i];
+        x[i] = (y[i]-summ)/S[i][i]*D[i];
     }
-
     delete [] y;
     for (int i=0;i<sz;i++)
     {
@@ -98,7 +101,4 @@ double* Square::solve()
     delete [] D;
     delete [] S;
     return x;
-
-
-
 }

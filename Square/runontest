@@ -1,0 +1,12 @@
+#!/bin/bash
+find "tests/" -type f |sort |grep \.in | while read FILENAME; do
+		echo -e '\E[33;40mRunning on test: ' $FILENAME
+		tput sgr0
+		echo "Starting $1..."
+		 ./${1} $FILENAME >  "${FILENAME%%.in}.out"
+		cat  ${FILENAME%%.in}.out
+		echo -e '\E[32;40m'
+		tput sgr0
+		echo "===================================================================="
+	done
+

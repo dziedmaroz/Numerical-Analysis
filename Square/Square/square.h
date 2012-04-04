@@ -1,8 +1,7 @@
-#ifndef SQUARE_H
-#define SQUARE_H
-
 #include <cmath>
 #include <stdio.h>
+
+struct DivByZeroException {};
 
 class Square
 {
@@ -16,5 +15,3 @@ public:
     int getSize () {return sz;}
     ~Square ();
 };
-
-#endif // SQUARE_H
