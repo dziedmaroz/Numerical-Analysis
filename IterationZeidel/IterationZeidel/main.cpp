@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
             continue;
         }
         iter.solveIteration();
+        iter.solveZeidel();
 //        for (int i=0;i<iter.getSize();i++)
 //        {
 //            printf ("%8.3lf  ",res[i]);

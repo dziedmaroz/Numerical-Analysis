@@ -30,6 +30,7 @@ class IterationZeidel
 public:
     IterationZeidel(char* filename);
     double* solveIteration();
+    double* solveZeidel ();
     void makeIterable ();
     ~IterationZeidel();
 };

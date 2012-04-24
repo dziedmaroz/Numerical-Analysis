@@ -162,6 +162,7 @@ double* IterationZeidel::solveIteration()
     {
         xK[i]=x0[i];
     }
+
     for (int i=0;i<size;i++)
     {
         double tmp = xK[i];
@@ -169,8 +170,13 @@ double* IterationZeidel::solveIteration()
         xK[permutation[i]]=tmp;
     }
     double* xKnxt = new double [size];
+    double* xDiff = new double [size];
+    for (int i=0;i<size;i++)
+    {
+        xDiff[i] = xK[i];
+    }
     int k=0;
-    while (pow(normB,k)*pow(normX0,k)+pow(normB,k)*normb/(1-normB)>epsilon)
+    while (normVector(xDiff,size)>epsilon || k==0 )
     {
         k++;
         for (int i=0;i<size;i++)
@@ -178,9 +184,16 @@ double* IterationZeidel::solveIteration()
             xKnxt[i]=matrix[i][size];
             for (int j=0;j<size;j++)
             {
-                xKnxt[i]+=xK[i]*matrix[i][j];
+                xKnxt[i]+=xK[j]*matrix[i][j];
             }
         }
+        for (int i=0;i<size;i++)
+        {
+            xDiff[i]=xK[i]-xKnxt[i];
+            xK[i]=xKnxt[i];
+        }
+
+
     }
     printf ("K = %d\n",k);
     for (int i=0;i<size;i++)
@@ -195,6 +208,83 @@ double* IterationZeidel::solveIteration()
     }
     printf ("\n");
 
+    delete [] xKnxt;
+    delete [] xK;
+    delete [] xDiff;
+    return NULL;
+}
 
+double* IterationZeidel::solveZeidel()
+{
+    double normB = normMatrix(matrix,size);
+    double normX0 = normVector(x0,size);
+    double* b = new double [size];
+    for (int i=0;i<size;i++)
+    {
+        b[i]=matrix[i][size];
+    }
+    double normb = normVector(b,size);
+    delete [] b;
+    double* xK = new double [size];
+    for (int i=0;i<size;i++)
+    {
+        xK[i]=x0[i];
+    }
+
+    for (int i=0;i<size;i++)
+    {
+        double tmp = xK[i];
+        xK[i]=xK[permutation[i]];
+        xK[permutation[i]]=tmp;
+    }
+    double* xKnxt = new double [size];
+    double* xDiff = new double [size];
+    for (int i=0;i<size;i++)
+    {
+        xDiff[i] = xK[i];
+    }
+    int k=0;
+    while (normVector(xDiff,size)>epsilon || k==0)
+    {
+        k++;
+        for (int i=0;i<size;i++)
+        {
+            xKnxt[i]=matrix[i][size];
+            for (int j=0;j<size;j++)
+            {
+                if (j<i)
+                {
+                    xKnxt[i]+=xKnxt[j]*matrix[i][j];
+                }
+                else
+                {
+                     xKnxt[i]+=xK[j]*matrix[i][j];
+                }
+            }
+        }
+        for (int i=0;i<size;i++)
+        {
+            xDiff[i]=xK[i]-xKnxt[i];
+            xK[i]=xKnxt[i];
+        }
+
+
+    }
+    printf ("K = %d\n",k);
+    for (int i=0;i<size;i++)
+    {
+        double tmp = xKnxt[i];
+        xKnxt[i]=xKnxt[permutation[i]];
+        xKnxt[permutation[i]]=tmp;
+    }
+    for (int i=0;i<size;i++)
+    {
+        printf ("%5.3f ",xKnxt[i]);
+    }
+    printf ("\n");
+
+    delete [] xKnxt;
+    delete [] xK;
+    delete [] xDiff;
     return NULL;
 }
