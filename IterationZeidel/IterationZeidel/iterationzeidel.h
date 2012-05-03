@@ -25,8 +25,7 @@ class IterationZeidel
     void swapColumns (int x, int y);
     double normMatrix (double** matr, int sz);
     double normVector (double* vector, int sz);
-
-
+    void print();
 public:
     IterationZeidel(char* filename);
     double* solveIteration();

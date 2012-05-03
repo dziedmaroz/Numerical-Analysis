@@ -42,41 +42,41 @@ IterationZeidel::~IterationZeidel()
 }
 
 void IterationZeidel::makeIterable()
-{
+{    
     for (int i=0;i<size;i++)
     {
+
         Position dominantPos = findDominant(i);
         double dominant = matrix[dominantPos.m][dominantPos.n];
         if (fabs(dominant)<pow(10,-20)) throw DivByZeroException ();
-        if (dominantPos.m==i)
+
+
+        if (dominantPos.m != dominantPos.n)
         {
-            swapColumns(i,dominantPos.n);
+            if (dominantPos.m==i)
+            {
+                swapColumns(i,dominantPos.n);
+            }
+            if (dominantPos.n==i)
+            {
+                swapRows(i,dominantPos.m);
+            }
         }
-        if (dominantPos.n==i)
-        {
-            swapRows(i,dominantPos.m);
-        }
+
         for (int j=0;j<size;j++)
         {
             if (i==j)
             {
-              matrix[i][j] = 0;
+                matrix[i][j] = 0;
             }
             else
             {
-               matrix[i][j]/=-dominant;
+                matrix[i][j]/=-dominant;
             }
         }
-         matrix[i][size]/=dominant;
-    }
-    for (int i=0;i<size;i++)
-    {
-        for (int j=0;j<size+1;j++)
-        {
-            printf ("%4.2f ",matrix[i][j]);
-        }
-        printf ("\n");
-    }
+        matrix[i][size]/=dominant;
+
+    }     
 }
 
 IterationZeidel::Position IterationZeidel::findDominant(int k)
@@ -91,27 +91,15 @@ IterationZeidel::Position IterationZeidel::findDominant(int k)
             pos.m = i;
             pos.n = k;
         }
-//        if (fabs(matrix[k][i])>fabs(matrix[pos.m][pos.n]))
-//        {
-//            pos.m = k;
-//            pos.n = i;
-//        }
+        if (fabs(matrix[k][i])>fabs(matrix[pos.m][pos.n]))
+        {
+            pos.m = k;
+            pos.n = i;
+        }
     }
     return pos;
 }
 
-double IterationZeidel::normMatrix(double **matr, int sz)
-{
-    double norm = 0;
-    for (int i=0;i<sz;i++)
-    {
-        for (int j=0;j<sz;j++)
-        {
-            norm+=(matr[i][j]*matr[i][j]);
-        }
-    }
-    return pow(norm,0.5);
-}
 
 double IterationZeidel::normVector(double *vector, int sz)
 {
@@ -125,12 +113,14 @@ double IterationZeidel::normVector(double *vector, int sz)
 
 void IterationZeidel::swapRows(int x, int y)
 {
-    for (int i=1;i<size+1;i++)
+
+    for (int i=0;i<size+1;i++)
     {
         double tmp = matrix[x][i];
         matrix [x][i] = matrix[y][i];
         matrix [y][i] = tmp;
     }
+
 }
 
 void IterationZeidel::swapColumns(int x, int y)
@@ -144,19 +134,11 @@ void IterationZeidel::swapColumns(int x, int y)
     int tmp = permutation[x];
     permutation [x] = permutation[y];
     permutation [y] = tmp;
-}
+} 
 
 double* IterationZeidel::solveIteration()
-{
-    double normB = normMatrix(matrix,size);
-    double normX0 = normVector(x0,size);
-    double* b = new double [size];
-    for (int i=0;i<size;i++)
-    {
-        b[i]=matrix[i][size];
-    }
-    double normb = normVector(b,size);
-    delete [] b;
+{    
+
     double* xK = new double [size];
     for (int i=0;i<size;i++)
     {
@@ -170,11 +152,7 @@ double* IterationZeidel::solveIteration()
         xK[permutation[i]]=tmp;
     }
     double* xKnxt = new double [size];
-    double* xDiff = new double [size];
-    for (int i=0;i<size;i++)
-    {
-        xDiff[i] = xK[i];
-    }
+    double* xDiff = new double [size];   
     int k=0;
     while (normVector(xDiff,size)>epsilon || k==0 )
     {
@@ -195,6 +173,7 @@ double* IterationZeidel::solveIteration()
 
 
     }
+    printf ("SIMPLE ITERATION:\n");
     printf ("K = %d\n",k);
     for (int i=0;i<size;i++)
     {
@@ -216,15 +195,6 @@ double* IterationZeidel::solveIteration()
 
 double* IterationZeidel::solveZeidel()
 {
-    double normB = normMatrix(matrix,size);
-    double normX0 = normVector(x0,size);
-    double* b = new double [size];
-    for (int i=0;i<size;i++)
-    {
-        b[i]=matrix[i][size];
-    }
-    double normb = normVector(b,size);
-    delete [] b;
     double* xK = new double [size];
     for (int i=0;i<size;i++)
     {
@@ -238,11 +208,7 @@ double* IterationZeidel::solveZeidel()
         xK[permutation[i]]=tmp;
     }
     double* xKnxt = new double [size];
-    double* xDiff = new double [size];
-    for (int i=0;i<size;i++)
-    {
-        xDiff[i] = xK[i];
-    }
+    double* xDiff = new double [size];  
     int k=0;
     while (normVector(xDiff,size)>epsilon || k==0)
     {
@@ -258,7 +224,7 @@ double* IterationZeidel::solveZeidel()
                 }
                 else
                 {
-                     xKnxt[i]+=xK[j]*matrix[i][j];
+                    xKnxt[i]+=xK[j]*matrix[i][j];
                 }
             }
         }
@@ -270,6 +236,7 @@ double* IterationZeidel::solveZeidel()
 
 
     }
+    printf ("ZEIDEL:\n");
     printf ("K = %d\n",k);
     for (int i=0;i<size;i++)
     {
