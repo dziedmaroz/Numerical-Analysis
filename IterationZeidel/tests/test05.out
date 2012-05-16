@@ -1,0 +1,8 @@
+RUNNING ON TEST: tests/test05.in
+SIMPLE ITERATION:
+K = 662
+  inf   inf  -nan   inf 
+ZEIDEL:
+K = 40
+-1.008 -0.947 -1.008 -1.063 
+

@@ -1,0 +1,250 @@
+\documentclass[a4paper,11pt]{extarticle}
+\usepackage[T2A]{fontenc}     
+\usepackage[utf8]{inputenc}  
+\usepackage{lmodern}  
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb} 
+\usepackage{listings}
+\usepackage{lstcustom}
+\usepackage{graphicx}
+\usepackage{geometry} % Меняем поля страницы
+\geometry{left=2cm}% левое поле
+\geometry{right=1.5cm}% правое поле
+\geometry{top=1cm}% верхнее поле
+\geometry{bottom=2cm}% нижнее поле
+\renewcommand\lstlistingname{Листинг}
+\renewcommand\contentsname{Содержание}
+\renewcommand\partname{ }
+\renewcommand{\thepart}{\arabic{part}}
+
+
+\title{Лабораторная работа №3. Решение систем линейных алгебраических уравнений с помощью LU-разложения}
+ 
+
+
+
+\author{Архангельский Илья}
+
+
+\begin{document}
+\begin{titlepage}
+	\begin{center}
+		БЕЛОРУССКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ \\
+		ФАКУЛЬТЕТ ПРИКЛАДНОЙ МАТЕМАТИКИ И ИНФОРМАТИКИ
+	\end{center}
+	\vspace{10em}
+	\begin{center}
+		\LARGE {Лабораторная работа \\
+		по вычислительным методам алгебры на тему:}
+		\linebreak	 
+		
+    Решение систем линейных алгебраических уравнений с помощью меода простой итерации и метода Зейделя
+	\end{center}
+	\vspace{3em}
+	\begin{flushright}
+	  
+	
+ 	Выполнил: \\	Архангельский И.А. \\ 
+ 	
+ 	  \vspace{1em}
+ 	
+ 	  Проверил: \\ Кондратюк А.П. \\
+ 	
+	\end{flushright}
+	
+	\vfill
+	\begin{center}
+		Минск, 2012
+	\end{center}
+\end{titlepage} 
+
+\newpage
+\part*{Входные и выходные данные.} 
+\section*{Входные данные}
+Входной файл содержит матрицу $(A|f)$, где  
+  $A$ - квадратная матрица коэффициентов СЛУ, 
+  $f$ - вектор-столбец свободных членов.
+  $\varepsilon$ - погрешность.
+  $x^0$ - начальное приближение.
+\section*{Выходные данные}
+Выходной файл содержит решения СЛУ полученные двумя методами, и количество выполненных итераций для каждого метода соответсвенно. 
+\newpage
+\part*{Блок-схема} 
+ \subsection*{Метод простой итерации}
+ \includegraphics[scale=0.9]{flowchartSimple1.pdf} 
+ \newpage
+ \subsection*{Метод Зейделя}
+ \includegraphics[scale=0.9]{flowchartZeidel.pdf} 
+  
+
+
+\newpage
+\part*{Реализация}
+\lstinputlisting[language=C++, style=eclipse, basicstyle=\scriptsize, title={iterationzeidel.h}]{"../IterationZeidel/iterationzeidel.h"}
+ 
+\lstinputlisting[language=C++, style=eclipse, basicstyle=\scriptsize, title={iterationzeidel.cpp}]{"../IterationZeidel/iterationzeidel.cpp"}
+ 
+\lstinputlisting[language=C++, style=eclipse, basicstyle=\scriptsize, title={main.cpp}]{"../IterationZeidel/main.cpp"}
+\newpage
+
+ 
+\newpage
+\part*{Тестовые данные}
+\begin{footnotesize}
+\framebox{
+  \begin{minipage}[t]{0.4\linewidth}   
+  \lstinputlisting[title={test01.in}]{"../tests/test01.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test01.out}]{"../tests/test01.out"}
+  \end{minipage}
+}
+\framebox
+{ 
+  \begin{minipage}[t]{0.4\linewidth}   
+  \lstinputlisting[title={test02.in}]{"../tests/test02.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test02.out}]{"../tests/test02.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test03.in}]{"../tests/test03.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test03.out}]{"../tests/test03.out"}
+  \end{minipage}  
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test04.in}]{"../tests/test04.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test04.out}]{"../tests/test04.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test05.in}]{"../tests/test05.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test05.out}]{"../tests/test05.out"}
+  \end{minipage}  
+}
+\end{footnotesize}
+\end{document}
+\author{Архангельский Илья}
+
+
+\begin{document}
+\begin{titlepage}
+	\begin{center}
+		БЕЛОРУССКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ \\
+		ФАКУЛЬТЕТ ПРИКЛАДНОЙ МАТЕМАТИКИ И ИНФОРМАТИКИ
+	\end{center}
+	\vspace{10em}
+	\begin{center}
+		\LARGE {Лабораторная работа \\
+		по вычислительным методам алгебры на тему:}
+		\linebreak	 
+		
+    Решение систем линейных алгебраических уравнений с помощью $LU$-разложения
+	\end{center}
+	\vspace{3em}
+	\begin{flushright}
+	  
+	
+ 	Выполнил: \\	Архангельский И.А. \\ 
+ 	
+ 	  \vspace{1em}
+ 	
+ 	  Проверил: \\ Кондратюк А.П. \\
+ 	
+	\end{flushright}
+	
+	\vfill
+	\begin{center}
+		Минск, 2012
+	\end{center}
+\end{titlepage} 
+
+\newpage
+\part*{Входные и выходные данные.} 
+\section*{Входные данные}
+Входной файл содержит матрицу $(A|f)$, где  
+  $A$ - квадратная матрица коэффициентов СЛУ, 
+  $f$ - вектор-столбец свободных членов.
+\section*{Выходные данные}
+Выходной файл содержит  решение СЛУ. 
+\section*{Исключения}
+\begin{itemize}
+  \item \textbf{NilMatrixExcpetion} - на вход подана пустая матрица (например, входной файл пуст)
+  \item \textbf{WrongMatrixDimentionsException} - на вход подана матрица размеры которой не соотвествуют предполагаемым
+  \item \textbf{NoArgsException} - не передано имя входного файла
+  \item \textbf{DivByZeroException} - во время получения $LU$-разложения произошло деление на $0$, т.е. на диагонали матрицы $U$ стоит 0
+\end{itemize}
+\newpage
+\part*{Блок-схема} 
+ \includegraphics[scale=0.9]{flowchart.pdf} 
+
+
+\newpage
+\part*{Реализация}
+
+\newpage
+
+ 
+\newpage
+\part*{Тестовые данные}
+\begin{footnotesize}
+\framebox{
+  \begin{minipage}[t]{0.4\linewidth}   
+  \lstinputlisting[title={test01.in}]{"../tests/test01.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test01.out}]{"../tests/test01.out"}
+  \end{minipage}
+}
+\framebox
+{ 
+  \begin{minipage}[t]{0.4\linewidth}   
+  \lstinputlisting[title={test02.in}]{"../tests/test02.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test02.out}]{"../tests/test02.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test03.in}]{"../tests/test03.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test03.out}]{"../tests/test03.out"}
+  \end{minipage}  
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test04.in}]{"../tests/test04.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test04.out}]{"../tests/test04.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test05.in}]{"../tests/test05.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test05.out}]{"../tests/test05.out"}
+  \end{minipage}  
+}
+\end{footnotesize}
+\end{document}
