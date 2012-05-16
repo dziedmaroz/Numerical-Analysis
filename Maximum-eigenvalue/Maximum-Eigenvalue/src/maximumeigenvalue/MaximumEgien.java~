@@ -1,0 +1,86 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package maximumeigenvalue;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+/**
+ *
+ * @author lucian
+ */
+public class MaximumEgien
+{
+    double [][] matrix;
+    double [] y;
+    double epsilon;
+    int k;
+    public MaximumEgien(String filename) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        int dim = Integer.parseInt(br.readLine());
+        matrix = new double [dim][dim];
+        for (int i =0;i<dim;i++)
+        {
+            StringTokenizer tmp = new StringTokenizer(br.readLine());
+            for (int j=0;j<dim;j++)
+            {
+                matrix[i][j]=Double.parseDouble(tmp.nextToken());
+            }
+        }
+        StringTokenizer tmp = new StringTokenizer(br.readLine());
+        y= new double [dim];
+        for (int i=0;i<dim;i++)
+        {
+             y[i]=Double.parseDouble(tmp.nextToken());
+        }
+        epsilon = Double.parseDouble(br.readLine());
+    }
+
+    public double getMaxEigen ()
+    {
+        double [] ythis = mulMatrix(y);
+        double [] yprev = y;
+        double [] lambdas = new double [yprev.length];
+
+        for (int i=0;i<lambdas.length;i++) lambdas[i]=ythis[i]/yprev[i];
+        while (eps(lambdas)>epsilon || k<10)
+        {
+            yprev = ythis;
+            ythis = mulMatrix(ythis);
+            
+            for (int i=0;i<lambdas.length;i++) lambdas[i]=ythis[i]/yprev[i];
+            k++;
+        }
+        return lambdas[0];
+
+
+    }
+
+    private double [] mulMatrix (double [] x)
+    {
+        double [] res= new double[matrix.length];
+        for (int i=0;i<matrix.length;i++)
+        {
+            res[i]=0;
+            for (int j=0;j<matrix.length;j++)
+            {
+                res[i]+= x[j]*matrix[i][j];
+            }
+        }
+        return res;
+    }
+    public int getIеrations () {return k;}
+    private double eps (double [] x)
+    {
+        double e = 0;
+        for (int i=1;i<x.length;i++) e+=Math.pow(Math.abs(x[0]-x[i]),2);
+        return Math.sqrt(e);
+    }
+}
