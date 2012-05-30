@@ -8,7 +8,6 @@
 \usepackage{listings}
 \usepackage{lstcustom}
 \usepackage{graphicx}
-\usepackage{pstricks}
 \usepackage{geometry} % Меняем поля страницы
 \geometry{left=2cm}% левое поле
 \geometry{right=1.5cm}% правое поле
@@ -20,17 +19,7 @@
 \renewcommand{\thepart}{\arabic{part}}
 
 
-\definecolor{javared}{rgb}{0.6,0,0} % for strings
-
-\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
-
-\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
-
-\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
-
-
-
-
+\title{Лабораторная работа №3. Решение систем линейных алгебраических уравнений с помощью LU-разложения}
 \author{Архангельский Илья}
 
 
@@ -46,7 +35,7 @@
 		по вычислительным методам алгебры на тему:}
 		\linebreak	 
 		
-    Определение наибольшего по модулю собственного значения матрицы
+    Решение систем линейных алгебраических уравнений с помощью $LU$-разложения
 	\end{center}
 	\vspace{3em}
 	\begin{flushright}
@@ -69,28 +58,30 @@
 \newpage
 \part*{Входные и выходные данные.} 
 \section*{Входные данные}
-Входной файл в первой строке содержит число $n$ - размерность матрицы , следующие $n$ строк содержат матрицу $(A)$, где  
-  $A$ - квадратная матрица. \\
-Строка $n+2$ содержит начальный вектор $y_0$. \\
-Строка $n+3$ содержит величину $\varepsilon$ - заданную точность.
+Входной файл содержит матрицу $(A|f)$, где  
+  $A$ - квадратная матрица коэффициентов СЛУ, 
+  $f$ - вектор-столбец свободных членов.
 \section*{Выходные данные}
-На выход в stdout подается максимальное собственное значение матрицы $A$
+Выходной файл содержит  решение СЛУ. 
+\section*{Исключения}
+\begin{itemize}
+  \item \textbf{NilMatrixExcpetion} - на вход подана пустая матрица (например, входной файл пуст)
+  \item \textbf{WrongMatrixDimentionsException} - на вход подана матрица размеры которой не соотвествуют предполагаемым
+  \item \textbf{NoArgsException} - не передано имя входного файла
+  \item \textbf{DivByZeroException} - во время получения $LU$-разложения произошло деление на $0$, т.е. на диагонали матрицы $U$ стоит 0
+\end{itemize}
 \newpage
 \part*{Блок-схема} 
-\includegraphics[scale=1]{flowchart.pdf}
- 
+ \includegraphics[scale=0.9]{flowchart.pdf} 
 
 
 \newpage
 \part*{Реализация}
-
-
-\lstinputlisting[language=Java,  style=eclipse, basicstyle=\scriptsize]{"../Maximum-Eigenvalue/src/maximumeigenvalue/MaximumEgien.java"}
- 
- 
+\lstinputlisting[language=Ruby, style=eclipse, basicstyle=\scriptsize]{"../LU/lib/lu.rb"}
+\newpage
 
  
- \newpage
+\newpage
 \part*{Тестовые данные}
 \begin{footnotesize}
 \framebox{
@@ -119,6 +110,23 @@
   \lstinputlisting[title={test03.out}]{"../tests/test03.out"}
   \end{minipage}  
 }
- 
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test04.in}]{"../tests/test04.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test04.out}]{"../tests/test04.out"}
+  \end{minipage}
+}
+\framebox
+{
+  \begin{minipage}[t]{0.4\linewidth}
+  \lstinputlisting[title={test05.in}]{"../tests/test05.in"}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\linewidth}
+  \lstinputlisting[title={test05.out}]{"../tests/test05.out"}
+  \end{minipage}  
+}
 \end{footnotesize}
 \end{document}

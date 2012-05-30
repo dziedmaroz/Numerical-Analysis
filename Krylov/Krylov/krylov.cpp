@@ -24,7 +24,7 @@ Krylov::Krylov(char *filename)
 
 double* Krylov::mulMatrix(double* x)
     {
-        double[] res = new double[size];
+        double* res = new double[size];
         for (int i = 0; i < size; i++)
         {
             res[i] = 0;
@@ -51,28 +51,41 @@ double* Krylov::getPoly ()
     for (int i=0;i<size;i++)
     {
         c[i]= c_0[i];
-        Q[i][0]=c[i];
     }
-    for (int i=0;i<size;i++)
+    for (int i=0;i<size+1;i++)
     {
-        double* tmp = new double [size];
-        tmp = mulMatrix (c);
         for (int j=0;j<size;j++)
         {
-            c[j]=tmp[j];
-            Q[j][i+1] = c[j];
+            Q[j][((size+1)+size-1-i)%(size+1)] = c[j];
         }
-        delete [] tmp;
-    }
+        c = mulMatrix (c);
 
+    }
     Gauss gauss = Gauss(Q,size);
     int m = 0;
     double* p = gauss.solve (m);
     if (m==size)
     {
-        for (int i=0;i<size;i++) printf ("%3.3lf ",p[i]);
+        return p;
+    }
+    else
+    {
+        printf ("Only %d steps on get Poly\n",m);
     }
     for (int i=0;i<size;i++) delete [] Q[i];
     delete [] Q;
     delete [] c;
+    return NULL;
 }
+
+double* Krylov::getEigenVector (double* poly, double eigenVal)
+{
+    double* vector = new double [size];
+    vector[0]=1;
+    for (int i=1;i<size;i++)
+    {
+        vector[i] = vector[i-1]*eigenVal-poly[i-1];
+    }
+    return vector;
+}
+

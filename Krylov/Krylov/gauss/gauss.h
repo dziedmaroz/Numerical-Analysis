@@ -2,7 +2,7 @@
 #define GAUSS_H
 
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdio>
 #include <math.h>
 #include <iostream>
 
@@ -30,7 +30,7 @@ class Gauss
 public:
     Gauss(char* filename);
     Gauss(double** m, int sz);
-    double* getMatrix ();
+    double** getMatrix ();
     double* solve (int & k);
     int getSize() {return size;}
     ~Gauss ();

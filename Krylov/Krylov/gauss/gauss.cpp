@@ -39,7 +39,6 @@ Gauss::Gauss (double** m, int sz)
     {
         permutation [i]= i;
     }
-    fclose (fin);
 }
 
 Gauss::Position Gauss::findDominant(int k)
@@ -95,7 +94,7 @@ double* Gauss::solve(int & k)
         if (fabs(dominant)<pow(10,-20))
         {
             k = i;
-            return getMatrix();
+            return NULL;
         }
         if (dominantPos.m==i)
         {
@@ -136,7 +135,7 @@ double* Gauss::solve(int & k)
         X[i]=x/matrix[i][i];
     }
     permutate (X);
-
+    k = size;
     return X;
 }
 
@@ -154,7 +153,7 @@ void Gauss::permutate(double *&x)
     delete res;
 }
 
-double* Gauss::getMatrix ()
+double** Gauss::getMatrix ()
 {
     double** ret = new double* [size];
     for (int i=0;i<size;i++)
